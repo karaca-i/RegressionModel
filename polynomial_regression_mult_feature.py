@@ -85,21 +85,8 @@ def get_generalized_model(w,b,x,y,alpha,lambda_,iters):
     return f
 
 # testing
-# x_train = np.array([1.0,10],[2.0,12],[4.0,17])
-x_train = np.array([1.0,2.4,4.0,7.0])
-y_train = np.array([300.0,500.0,900.0,2100.0])
 
 
-
-
-# plt.scatter(x_train,y_train,marker='x',c='r',label = "House Pricing")
-# w_in = 50
-# b_in = 100
-# bad_model = w_in * x_train
-# trained_model = get_generalized_model(w_in,w_in,x_train,y_train,1.0e-2,0,10000)
-# plt.plot(x_train,bad_model,label="bad model")
-# plt.legend()
-# plt.show()
 
     
     
