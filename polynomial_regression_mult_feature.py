@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 def get_model(w,b,x):
     m,n = x.shape
 
+    # feature engineering
     x_modified = np.array([[row[0],row[1]**2, row[2]**3] for row in x])
     f = np.zeros(m)
     
@@ -47,7 +48,8 @@ def compute_gradient(w,b,x,y):
     
     for i in range(m):
         err = f[i] - y[i]
-        dj_dw += err * x[i]
+        for j in range(n):
+            dj_dw[j] += err * x[i,j]
         dj_db += err
         
     dj_dw /= m
@@ -79,7 +81,7 @@ def gradient_decent(w_in,b_in, x,y,alpha,lambda_,iters):
     
     return w,b
 
-def get_generalized_model(w,b,x,y,alpha,lambda_,iters):
+def get_regularized_model(w,b,x,y,alpha,lambda_,iters):
     
     w_new , b_new = gradient_decent(w,b,x,y,alpha,lambda_,iters)
     
@@ -88,18 +90,31 @@ def get_generalized_model(w,b,x,y,alpha,lambda_,iters):
 
 # testing
 
-x_train = np.array([[1,10,3],[2,12,4],[4,22,3],[9,32,8]]) # size, rooms, restrooms
-y_train = np.array([300,500,900,2100])
-
-
-
-x_indices = np.arange(0,4)
+#x_train = np.array([[1,10,3],[2,12,4],[4,22,3],[9,32,8]]) # size, rooms, restrooms
+y_train = np.array([300,500,900,2100,3100,4100,5900,7100,9100,11100,14100,22100])
+x_indices = np.arange(0,12)
 plt.scatter(x_indices,y_train,marker = 'x',c='r',label="actual prices")
 
-w_in = np.array([5,3,1])
-b_in = 100
-bad_model = get_model(w_in,b_in,x_train)
+num_houses = 12
+num_features = 3
+
+# Define increasing values for each feature
+sizes = np.linspace(1, 20, num_houses)  # Increasing sizes from 100 to 300 sq. ft.
+bedrooms = np.arange(10, 34, 2)    # Increasing bedroom counts from 1 to 12
+bathrooms = np.arange(1, num_houses + 1)   # Increasing bathroom counts from 1 to 12
+
+# Combine the features into a 2D array
+x_train2 = np.column_stack((sizes, bedrooms, bathrooms))
+
+w_in = np.array([3.0,2.0,1.0])
+b_in = 100.
+bad_model = get_model(w_in, b_in, x_train2)
+# plt.plot(x_indices, y_train,label="target model")
 plt.plot(x_indices,bad_model,label = "bad model")
+
+# Now let's create the trained model
+trained_model = get_regularized_model(w_in,b_in,x_train2,y_train,alpha= 1.0e-4,lambda_=0.7, iters = 10000)
+plt.plot(x_indices,trained_model, label="trained model")
 
 plt.legend()
 plt.show()
