@@ -13,11 +13,10 @@ def get_model(w,b,x):
 def compute_cost(w,b,x,y):
     m,n = x.shape
     
-    f = get_model(w,b,x)
-    
     total_cost = 0
     for i in range(m):
-        err = f[i] - y[i]
+        f = np.dot(x[i],w) +b
+        err = f - y[i]
         err = err **2
         total_cost += err
     

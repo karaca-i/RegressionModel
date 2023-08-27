@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 def get_model(w,b,x):
     m,n = x.shape
 
+    x_modified = np.array([[row[0],row[1]**2, row[2]**3] for row in x])
     f = np.zeros(m)
+    
     for i in range(m):
-        f[i] = np.dot(w,x[i]) + b
+        f[i] = np.dot(x_modified[i],w) + b
     
     return f
 
@@ -85,6 +87,25 @@ def get_generalized_model(w,b,x,y,alpha,lambda_,iters):
     return f
 
 # testing
+
+x_train = np.array([[1,10,3],[2,12,4],[4,22,3],[9,32,8]]) # size, rooms, restrooms
+y_train = np.array([300,500,900,2100])
+
+
+
+x_indices = np.arange(0,4)
+plt.scatter(x_indices,y_train,marker = 'x',c='r',label="actual prices")
+
+w_in = np.array([5,3,1])
+b_in = 100
+bad_model = get_model(w_in,b_in,x_train)
+plt.plot(x_indices,bad_model,label = "bad model")
+
+plt.legend()
+plt.show()
+    
+        
+
 
 
 
