@@ -26,8 +26,8 @@ def one_variable_model(w,b,x):
     
     f = np.zeros((m,))
     for i in range(m):
-        z = w*x + b
-        f[i] = sigmoid(z)
+        z = w*x[i] + b
+        f[i] = sigmoid(z)                            
 
     return f
         
@@ -117,12 +117,9 @@ y_train2 = np.array([0, 0, 0, 1, 1, 1])
 plt.scatter(x_train,y_train,marker = 'x', c = 'r', label = 'actual data')
 
 w = 0
-b = 50
+b = 5
 bad_model = one_variable_model(w, b,x_train)
 plt.plot(x_train,bad_model,label = 'bad model')
-
-
-
 
 
     
