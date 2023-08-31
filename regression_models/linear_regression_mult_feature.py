@@ -7,16 +7,7 @@ def get_model(w,b,x):
 
 def compute_cost_old(w,b,x,y):
     m,n = x.shape
-    
-    total_cost = 0
-    for i in range(m):
-        f = np.dot(x[i],w) +b
-        err = f - y[i]
-        err = err **2
-        total_cost += err
-    
-    total_cost /= (2*m)
-    return total_cost  
+    return np.sum(np.square(((x @ w.T) + b) - y))/(2*m) 
 
 def compute_cost(w,b,x,y):
     m,n = x.shape
