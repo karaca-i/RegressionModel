@@ -19,17 +19,6 @@ def get_model(w,b,x):
     
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
-
-def one_variable_model(w,b,x):
-    m = x.shape[0]
-    x = zscore_normalize_features(x)
-    
-    f = np.zeros((m,))
-    for i in range(m):
-        z = w*x[i] + b
-        f[i] = sigmoid(z)                            
-
-    return f
         
 
 def compute_cost(w,b,x,y):
@@ -80,6 +69,19 @@ def compute_reg_gradient(w,b,x,y,lambda_):
 
     return dj_dw, dj_db
 
+def gradient_descent(w,b,x,y,alpha,lambda_,iters):
+    m,n = x.shape
+    
+    w_new = w
+    b_new = b
+    
+    for i in range(iters):
+        dj_dw, dj_db = compute_reg_gradient(w_new,b_new,x,y,lambda_)
+        w -= alpha * dj_dw
+        b -= alpha * dj_db
+        
+    return w,b
+
 def plot_classification(x_train, y_train, X_train2, y_train2):
     pos = y_train == 1
     neg = y_train == 0
@@ -110,16 +112,17 @@ def plot_classification(x_train, y_train, X_train2, y_train2):
 
 x_train = np.array([0., 1, 2, 3, 4, 5])
 y_train = np.array([0,  0, 0, 1, 1, 1])
-X_train2 = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
+x_train2 = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
 y_train2 = np.array([0, 0, 0, 1, 1, 1])
 
-# test for 1 variable
-plt.scatter(x_train,y_train,marker = 'x', c = 'r', label = 'actual data')
 
-w = 0
-b = 5
-bad_model = one_variable_model(w, b,x_train)
-plt.plot(x_train,bad_model,label = 'bad model')
+w = np.array([0.,0.2])
+b = 1.
+
+bad_model = get_model(w,b,x_train2)
+
+plot_classification(x_train,y_train,x_train2,y_train2)
+# plt.plot(x_train,bad_model,label = 'bad model')
 
 
     
