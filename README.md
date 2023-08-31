@@ -1,16 +1,22 @@
 # Regression Model Visualizer
-A technical project designed to enable the creation of various types of simple machine learning models; 
-**linear, polynomial, logistic** (for classification), **multi-featured models**.
-
+A technical project designed to enable the creation of various types of simple machine learning models.
 Once you create a model, you can observe its training performance and effectiveness **in real-time through graphical 
 representations.**
 
 The unique aspect of this project 
 is that **it doesn't rely on** external machine learning libraries; instead, all functionalities are implemented from scratch. 
-The project offers control over factors like learning rate, regularization coefficient, and other 
+The project **offers control over factors** like **learning rate**, **regularization coefficient**, and other 
 variables that influence the model's behavior and efficiency.
 
-<h3 align="left">Languages and Tools:</h3>
+<h3 align="left">Motivation</h3>  
+Discovering insights for inquiries like:
+
+- How does adjusting the learning rate influence the accuracy of model training?
+- How can excessive regularization of model parameters lead to underfitting instead of preventing overfitting?
+
+Or even though you do not understand the basics of machine learning, you can just enjoy investigating the learning process of your self-created models, and play around.
+
+<h3 align="left">Languages and Tools</h3>
 <p align="left"> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a>  <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> </a> <a href="https://heroku.com" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" alt="heroku" width="40" height="40"/> </a>  </p>
 
 ## **Contributors**
@@ -69,9 +75,14 @@ Used for classification problems, the trained model determines the most suitable
 ![logregerr](https://github.com/karaca-i/RegressionModel/blob/main/images/logregerr.png)
 
 ## Dependencies
+Please use `Python 3.6` or higher.  
+
 Install from PyPi:
 ```bash
 pip install numpy
+```
+```bash
+pip install flask
 ```
 
 Main motivation behind this project is understand how machine learning models are working behind the scenes and understanding the effects of changing: parameters, learning rate and regularization coefficient lambda of the models by
