@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils.plot import plot_data
 from utils.normalize import zscore_normalize_features
+from utils.plot import plot_classification
 
 # x1 = size, x2 = age, y = if has tumor or not
 
-def get_model(w,b,x):
-    
+def get_model_old(w,b,x):
+    # w is a 1-d array, x is 2-d array
     m, n = x.shape
-    x = zscore_normalize_features(x)
+    # x = zscore_normalize_features(x)
 
     f = np.zeros(m)
     for i in range(m):
@@ -16,12 +17,21 @@ def get_model(w,b,x):
         f[i] = sigmoid(z)
 
     return f
+
+def get_model(w,b,x):
+    
+    m, n = x.shape
+    # x = zscore_normalize_features(x)
+
+    z = np.dot(x,w) + b
+    f = sigmoid(z)
+    return f
     
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
         
 
-def compute_cost(w,b,x,y):
+def compute_cost_old(w,b,x,y):
     m,n = x.shape
 
     total_cost = 0.0
@@ -34,7 +44,14 @@ def compute_cost(w,b,x,y):
     total_cost /= m
     return total_cost 
 
-def compute_cost_regularized(w,b,x,y,lambda_):
+def compute_cost(w,b,x,y):
+    
+    m = x.shape[0]
+    z = np.dot(x,w) + b
+    f = sigmoid(z)
+    total_cost = -np.sum(y * np.log(f) + (1 - y) * np.log(1 - f)) / m
+
+def compute_cost_regularized_old(w,b,x,y,lambda_):
     m,n = x.shape
 
     total_cost = compute_cost(w,b,x,y)
@@ -46,7 +63,15 @@ def compute_cost_regularized(w,b,x,y,lambda_):
     total_cost += reg_cost
     return total_cost
 
-def compute_gradient(w,b,x,y):
+def compute_cost_regularized(w,b,x,y,lambda_):
+    m,n = x.shape
+
+    total_cost = compute_cost(w,b,x,y)
+    
+    reg_cost = np.sum(w**2) * lambda_ / (2*m)
+    return total_cost + reg_cost
+
+def compute_gradient_old(w,b,x,y):
     m,n =x.shape
     dj_dw = np.zeros((n,))
     dj_db =0.
@@ -63,9 +88,19 @@ def compute_gradient(w,b,x,y):
 
     return dj_dw, dj_db
 
+def compute_gradient(w,b,x,y):
+    m = x.shape[0]
+    
+    f = get_model(w,b,x)
+    err = f- y
+    dj_dw = np.dot(x.T, err) / m
+    dj_db = np.sum(err) / m
+    
+    return dj_dw, dj_db
+
 def compute_reg_gradient(w,b,x,y,lambda_):
     dj_dw, dj_db = compute_gradient(w,b,x,y)
-    dj_dw += w * lambda_ / x.shape[0]
+    dj_dw += np.dot(lambda_,w) / x.shape[0]
 
     return dj_dw, dj_db
 
@@ -77,38 +112,11 @@ def gradient_descent(w,b,x,y,alpha,lambda_,iters):
     
     for i in range(iters):
         dj_dw, dj_db = compute_reg_gradient(w_new,b_new,x,y,lambda_)
-        w -= alpha * dj_dw
-        b -= alpha * dj_db
+        w_new -= alpha * dj_dw
+        b_new -= alpha * dj_db
         
-    return w,b
+    return w_new,b_new
 
-def plot_classification(x_train, y_train, X_train2, y_train2):
-    pos = y_train == 1
-    neg = y_train == 0
-
-    dlblue = '#0096ff'
-    fig,ax = plt.subplots(1,2,figsize=(8,3))
-
-    #plot 1, single variable
-    ax[0].scatter(x_train[pos], y_train[pos], marker='x', s=80, c = 'red', label="y=1")
-    ax[0].scatter(x_train[neg], y_train[neg], marker='o', s=100, label="y=0", facecolors='none', 
-              edgecolors=dlblue,lw=3)
-
-    ax[0].set_ylim(-0.08,1.1)
-    ax[0].set_ylabel('y', fontsize=12)
-    ax[0].set_xlabel('x', fontsize=12)
-    ax[0].set_title('one variable plot')
-    ax[0].legend()
-
-    #plot 2, two variables
-    plot_data(X_train2, y_train2, ax[1])
-    ax[1].axis([0, 4, 0, 4])
-    ax[1].set_ylabel('$x_1$', fontsize=12)
-    ax[1].set_xlabel('$x_0$', fontsize=12)
-    ax[1].set_title('two variable plot')
-    ax[1].legend()
-    plt.tight_layout()
-    plt.show()
 
 x_train = np.array([0., 1, 2, 3, 4, 5])
 y_train = np.array([0,  0, 0, 1, 1, 1])
@@ -125,6 +133,3 @@ plot_classification(x_train,y_train,x_train2,y_train2)
 # plt.plot(x_train,bad_model,label = 'bad model')
 
 
-    
-plt.legend()
-plt.show()

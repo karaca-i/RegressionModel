@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def plot_data(X, y, ax, pos_label="y=1", neg_label="y=0", s=80, loc='best' ):
     """ plots logistic data with two axis """
     # Find Indices of Positive and Negative Examples
@@ -15,3 +17,32 @@ def plot_data(X, y, ax, pos_label="y=1", neg_label="y=0", s=80, loc='best' ):
     ax.figure.canvas.toolbar_visible = False
     ax.figure.canvas.header_visible = False
     ax.figure.canvas.footer_visible = False
+    
+def plot_classification(x_train, y_train, X_train2, y_train2):
+    pos = y_train == 1
+    neg = y_train == 0
+
+    dlblue = '#0096ff'
+    fig,ax = plt.subplots(1,2,figsize=(8,3))
+
+    #plot 1, single variable
+    ax[0].scatter(x_train[pos], y_train[pos], marker='x', s=80, c = 'red', label="y=1")
+    ax[0].scatter(x_train[neg], y_train[neg], marker='o', s=100, label="y=0", facecolors='none', 
+              edgecolors=dlblue,lw=3)
+
+    ax[0].set_ylim(-0.08,1.1)
+    ax[0].set_ylabel('y', fontsize=12)
+    ax[0].set_xlabel('x', fontsize=12)
+    ax[0].set_title('one variable plot')
+    ax[0].legend()
+
+    #plot 2, two variables
+    plot_data(X_train2, y_train2, ax[1])
+    ax[1].axis([0, 4, 0, 4])
+    ax[1].set_ylabel('$x_1$', fontsize=12)
+    ax[1].set_xlabel('$x_0$', fontsize=12)
+    ax[1].set_title('two variable plot')
+    ax[1].legend()
+    plt.tight_layout()
+    plt.show()
+    

@@ -1,14 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def get_model(w,b,x):
+def get_model_old(w,b,x):
     m = x.shape[0]
 
     f = np.zeros(m)
     f = w * x + b
+    
     return f
 
-def compute_cost(w,b,x,y):
+def get_model(w,b,x):
+    f = np.dot(w,x) + b
+    return f 
+
+def compute_cost_old(w,b,x,y):
     m = x.shape[0]
     
     f = get_model(w,b,x)
@@ -21,8 +26,15 @@ def compute_cost(w,b,x,y):
     total_cost /= (2*m)
     return total_cost    
 
+def compute_cost(w,b,x,y):
+    m = x.shape[0]
     
-def compute_gradient(w,b,x,y):
+    f = get_model(w,b,x)
+    err = f - y
+    total_cost = np.sum(np.square(err)) / (2*m)
+    return total_cost
+
+def compute_gradient_old(w,b,x,y):
     m = x.shape[0]
     
     dj_dw = 0.
@@ -37,6 +49,16 @@ def compute_gradient(w,b,x,y):
         
     dj_dw /= m
     dj_db /= m
+    
+    return dj_dw, dj_db
+
+def compute_gradient(w,b,x,y):
+    m = x.shape[0]
+    
+    f = get_model(w,b,x)
+    err = f - y
+    dj_dw = np.sum(np.dot(err,x)) / m
+    dj_db = np.sum(err) / m
     
     return dj_dw, dj_db
 

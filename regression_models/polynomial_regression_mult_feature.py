@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils.normalize import zscore_normalize_features
 
-def get_model(w,b,x):
+def get_model_old(w,b,x):
     m,n = x.shape
 
     x_modified = np.array([[row[0],row[1]**2, row[2]**2] for row in x]) # feature engineering
@@ -15,7 +15,17 @@ def get_model(w,b,x):
     
     return f
 
-def compute_cost(w,b,x,y):
+def get_model(w, b, x):
+    m, n = x.shape
+
+    x_modified = np.column_stack((x[:, 0], x[:, 1] ** 2, x[:, 2] ** 2)) # feature engineering
+    x_modified = zscore_normalize_features(x_modified)
+    
+    f = np.dot(x_modified, w) + b
+    
+    return f
+
+def compute_cost_old(w,b,x,y):
     m,n = x.shape
     
     f = get_model(w,b,x)
@@ -30,7 +40,15 @@ def compute_cost(w,b,x,y):
     total_cost /= (2*m)
     return total_cost
 
-def compute_reg_cost(w,b,x,y,lambda_):
+def compute_cost(w,b,x,y):
+    m,n = x.shape
+    
+    f = get_model(w,b,x)
+    
+    err = np.square(f-y)
+    return np.sum(err) / (2*m)
+
+def compute_reg_cost_old(w,b,x,y,lambda_):
     m,n = x.shape
     
     non_reg_cost = compute_cost(w,b,x,y)
@@ -41,8 +59,16 @@ def compute_reg_cost(w,b,x,y,lambda_):
         
     reg_cost = (reg_cost * lambda_) / (2*m)
     return non_reg_cost + reg_cost
+
+def compute_reg_cost(w,b,x,y,lambda_):
+    m = x.shape[0]
     
-def compute_gradient(w,b,x,y):
+    non_reg_cost = compute_cost(w,b,x,y)
+    
+    reg_cost = np.sum(w**2) * lambda_ / (2*m)
+    return non_reg_cost + reg_cost
+    
+def compute_gradient_old(w,b,x,y):
     m,n = x.shape
     
     dj_dw = np.zeros(n)
@@ -60,13 +86,32 @@ def compute_gradient(w,b,x,y):
     
     return dj_dw, dj_db
 
-def compute_reg_gradient(w,b,x,y,lambda_):
+def compute_gradient(w,b,x,y):
+    m,n = x.shape
+    
+    f = get_model(w,b,x)
+    err = f-y
+    dj_dw = np.dot(x.T,err) / m
+    dj_db = np.sum(err) / m
+    
+    return dj_dw, dj_db
+
+def compute_reg_gradient_old(w,b,x,y,lambda_):
     m,n = x.shape
     
     dj_dw, dj_db = compute_gradient(w,b,x,y)
     
     for i in range(n):
         dj_dw[i] += (lambda_ / m) * (w[i])
+        
+    return dj_dw, dj_db
+
+def compute_reg_gradient(w,b,x,y,lambda_):
+    m,n = x.shape
+    
+    dj_dw, dj_db = compute_gradient(w,b,x,y)
+    
+    dj_dw += np.dot(lambda_ / m, w)
         
     return dj_dw, dj_db
 
@@ -81,10 +126,9 @@ def gradient_decent(w_in,b_in, x,y,alpha,lambda_,iters):
     reg_J = []
     w_history = []
 
-    
     for i in range(iters):
         dj_dw, dj_db = compute_reg_gradient(w,b,x,y,lambda_)
-        if i % 5 == 0:
+        if i <= iters * (2/3):
             reg_cost = compute_reg_cost(w,b,x,y,lambda_)
             cost = compute_cost(w,b,x,y)
             
