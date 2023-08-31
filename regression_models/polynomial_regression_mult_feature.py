@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from utils.normalize_regularize import zscore_normalize_features
+from utils.normalize import zscore_normalize_features
 
 def get_model(w,b,x):
     m,n = x.shape
