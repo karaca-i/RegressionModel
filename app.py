@@ -113,11 +113,11 @@ def learn_logistic(client_sid, msg):
     i = 1
     
     # zipping
-    combined = list(zip(x,y))
-    combined.sort(key=lambda pair:pair[1])
-    x,y = zip(*combined)
-    x = np.array(x)
-    y = np.array(y)
+    # combined = list(zip(x,y))
+    # combined.sort(key=lambda pair:pair[1])
+    # x,y = zip(*combined)
+    # x = np.array(x)
+    # y = np.array(y)
         
     x_normalized = zscore_normalize_features(x)
     

@@ -1,102 +1,121 @@
-{% extends "base.html" %}
-{% set logistic_active = true %}
-{% block head %}
-{{ super() }}
+{% extends "base.html" %} {% set logistic_active = true %} {% block head %} {{
+super() }}
 <style>
   .lighter-green {
-    background-color: #6fbf6f!important;
+    background-color: #6fbf6f !important;
   }
   .lighter-red {
-    background-color: #db6560!important;
+    background-color: #db6560 !important;
   }
 </style>
-{% endblock %}
-{% block title %}Logistic{% endblock %}
-{% block content %}
+{% endblock %} {% block title %}Logistic{% endblock %} {% block content %}
 <div id="main_container" class="container mt-5">
   <div class="row gx-5 justify-content-center">
     <div class="col-8">
       <table id="reg-table" class="table table-bordered"></table>
     </div>
     <div id="edit_feature_col" class="col d-none">
-      <div id="edit_feature_card" class="card" style="width: 18rem;">
-        <div id="edit_feature_title" class="card-header">
-          Featured
-        </div>
+      <div id="edit_feature_card" class="card" style="width: 18rem">
+        <div id="edit_feature_title" class="card-header">Featured</div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><input id="edit_input"></li>
-          <li id="edit_done" class="list-group-item text-light text-center bg-success ">Done</li>
-          <li id="edit_delete" class="list-group-item text-light text-center bg-danger">Delete</li>
+          <li class="list-group-item"><input id="edit_input" /></li>
+          <li
+            id="edit_done"
+            class="list-group-item text-light text-center bg-success"
+          >
+            Done
+          </li>
+          <li
+            id="edit_delete"
+            class="list-group-item text-light text-center bg-danger"
+          >
+            Delete
+          </li>
         </ul>
       </div>
     </div>
     <div id="new_feature_col" class="col d-none">
-      <div id="new_feature_card" class="card" style="width: 18rem;">
-        <div id="new_feature_title" class="card-header">
-          New Feature
-        </div>
+      <div id="new_feature_card" class="card" style="width: 18rem">
+        <div id="new_feature_title" class="card-header">New Feature</div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><input id="new_name_input" value="Feature_X"></li>
-          <li id="new_create" class="list-group-item text-light text-center bg-success ">Create</li>
-          <li id="new_cancel" class="list-group-item text-light text-center bg-danger">Cancel</li>
+          <li class="list-group-item">
+            <input id="new_name_input" value="Feature_X" />
+          </li>
+          <li
+            id="new_create"
+            class="list-group-item text-light text-center bg-success"
+          >
+            Create
+          </li>
+          <li
+            id="new_cancel"
+            class="list-group-item text-light text-center bg-danger"
+          >
+            Cancel
+          </li>
         </ul>
       </div>
     </div>
-     <div id="learn_col" class="col d-none">
-      <div id="learn_card" class="card" style="width: 18rem;">
-        <div id="learn_title" class="card-header">
-          Learning Settings
-        </div>
+    <div id="learn_col" class="col d-none">
+      <div id="learn_card" class="card" style="width: 18rem">
+        <div id="learn_title" class="card-header">Learning Settings</div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <div class="row">
-              <div class="col">lambda: </div>
-              <div id="lambda_val" class="col">0.001 </div>
+              <div class="col">lambda:</div>
+              <div id="lambda_val" class="col">0.001</div>
               <div id="inc_lambda" class="col-2 border text-center">+</div>
               <div id="dec_lambda" class="col-2 border text-center">-</div>
             </div>
           </li>
           <li class="list-group-item">
             <div class="row">
-              <div class="col">alpha: </div>
-              <div id="alpha_val" class="col">0.001 </div>
+              <div class="col">alpha:</div>
+              <div id="alpha_val" class="col">0.001</div>
               <div id="inc_alpha" class="col-2 border text-center">+</div>
               <div id="dec_alpha" class="col-2 border text-center">-</div>
             </div>
           </li>
-          <li id="learn_start" class="list-group-item text-light text-center bg-success ">Start</li>
-          <li id="learn_cancel" class="list-group-item text-light text-center bg-danger">Cancel</li>
+          <li
+            id="learn_start"
+            class="list-group-item text-light text-center bg-success"
+          >
+            Start
+          </li>
+          <li
+            id="learn_cancel"
+            class="list-group-item text-light text-center bg-danger"
+          >
+            Cancel
+          </li>
         </ul>
       </div>
     </div>
-     <div id="graph_col" class="col-12 d-none">
+    <div id="graph_col" class="col-6 d-none">
       <div id="graph_card" class="card">
-        <div id="graph_title" class="card-header">
-          Learning Curve
-        </div>
+        <div id="graph_title" class="card-header">Learning Curve</div>
         <div class="card-body">
-
-        <div class="row">
-          <canvas id="curve"></canvas>
-        </div>   
-        <div class="row">
-          <canvas id="curve1"></canvas>
-        </div>
-        <div class="row">
-          <div id="stop_btn" class="col-6 text-center border">
-              stop
-        </div>
-          <div id="exit_btn" class="col-6 text-center border">
-              exit
+          <div class="row">
+            <canvas id="curve"></canvas>
+          </div>
+          <div class="row">
+            <canvas id="curve1"></canvas>
+          </div>
+          <div class="row">
+            <div id="stop_btn" class="col-6 text-center border">stop</div>
+            <div id="exit_btn" class="col-6 text-center border">exit</div>
           </div>
         </div>
-        </div>
-        </div>
       </div>
+    </div>
   </div>
 </div>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.10.0/math.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+  integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+  crossorigin="anonymous"
+></script>
 <script src="{{url_for('static', filename='logistic.js')}}"></script>
 {% endblock %}
