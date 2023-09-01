@@ -13,7 +13,7 @@
 {% endblock %}
 {% block title %}Logistic{% endblock %}
 {% block content %}
-<div class="container mt-5">
+<div id="main_container" class="container mt-5">
   <div class="row gx-5 justify-content-center">
     <div class="col-8">
       <table id="reg-table" class="table table-bordered"></table>
@@ -70,13 +70,28 @@
       </div>
     </div>
      <div id="graph_col" class="col-4 d-none">
-      <div id="graph_card" class="card" style="width: 18rem;">
+      <div id="graph_card" class="card">
         <div id="graph_title" class="card-header">
           Learning Curve
         </div>
-        <div>
+        <div class="card-body">
+
+        <div class="row">
           <canvas id="curve"></canvas>
-        </div>        
+        </div>   
+        <div class="row">
+          <canvas id="curve1"></canvas>
+        </div>
+        <div class="row">
+          <div id="stop_btn" class="col-6 text-center border">
+              stop
+        </div>
+          <div id="exit_btn" class="col-6 text-center border">
+              exit
+          </div>
+        </div>
+        </div>
+        </div>
       </div>
   </div>
 </div>

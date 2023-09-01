@@ -196,5 +196,16 @@ def learn_linstart(msg):
 def learn_logstart(msg):
     running.add(request.sid)
     Thread(target=learn_logistic, args=(request.sid,msg,)).start()
+
+@socketio.on("stop")
+def stop():
+    print("stopped")
+    running.remove(request.sid)
+
+@socketio.on("start")
+def start():
+    print("started")
+    running.add(request.sid)
+
 if __name__ == '__main__':
     socketio.run(app)

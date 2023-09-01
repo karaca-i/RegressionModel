@@ -1,4 +1,5 @@
 const ctx = document.getElementById("curve");
+const ctx1 = document.getElementById("curve1");
 
 let chart_obj = new Chart(ctx, {
   type: "line",
@@ -23,6 +24,44 @@ let chart_obj = new Chart(ctx, {
         radius: 0,
       },
     },
+    responsive: true,
+    maintainAspectRatio: false,
+  },
+});
+
+let chart1_obj = new Chart(ctx1, {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: "Y(expected) / Sample Index",
+        borderColor: "#3cba9f",
+        pointRadius: 2,
+        fill: false,
+        showLine: false,
+      },
+      {
+        data: [],
+        label: "Y(Predicted) / Sample Index",
+        borderColor: "#ff9470",
+        fill: false,
+        pointRadius: 0,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      y: {
+          ticks: {
+            // forces step size to be 50 units
+            stepSize: 10,
+          }
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: false,
   },
 });
 
@@ -32,6 +71,17 @@ function addData(label, newData) {
     dataset.data.push(newData);
   });
   chart_obj.update();
+}
+
+function updateChart1(f, data)
+{
+  for(let i=0; i<data.length; i++)
+  {
+    chart1_obj.data.labels[i] = i;
+    chart1_obj.data.datasets[0].data[i] = data[i][0];
+    chart1_obj.data.datasets[1].data[i] = f[i];
+  }
+  chart1_obj.update();
 }
 
 let data = [
@@ -349,17 +399,70 @@ function updateLearnCard() {
 }
 function startLearning(alpha, lambda) {
   let graph_title = document.getElementById("graph_title");
+  let stop_btn = document.getElementById("stop_btn");
+  let pin_btn = document.getElementById("exit_btn");
+  stop_btn.addEventListener("mouseover", () =>
+  {
+    stop_btn.classList.add("bg-secondary");
+    stop_btn.classList.add("text-light");
+  });
+  stop_btn.addEventListener("mouseout", () =>
+  {
+    stop_btn.classList.remove("bg-secondary");
+    stop_btn.classList.remove("text-light");
+  });
+  pin_btn.addEventListener("mouseover", () =>
+  {
+    pin_btn.classList.add("bg-secondary");
+    pin_btn.classList.add("text-light");
+  });
+  pin_btn.addEventListener("mouseout", () =>
+  {
+    pin_btn.classList.remove("bg-secondary");
+    pin_btn.classList.remove("text-light");
+  });
   graph_title.innerHTML = "Learning Curve | α=" + alpha + ", λ=" + lambda;
   var socket = io();
+  pin_btn.addEventListener("click", () => {
+    stop_btn.innerHTML = "stop";
+    socket.disconnect();
+    chart_obj.data.datasets[0].data = [];
+    chart_obj.data.labels = [];
+    chart_obj.update();
+    chart1_obj.data.datasets[0].data = [];
+    chart1_obj.data.datasets[1].data = [];
+    chart1_obj.data.labels = [];
+    chart1_obj.update();
+    let col = document.getElementById("graph_col");
+    col.classList.add("d-none");
+    updateTable(data,names);
+  });
   socket.on("connect", function () {
     socket.emit("learn_linear", { data: data, alpha: alpha, lambda: lambda });
-    setInterval(() => {
+    let inter = setInterval(() => {
       socket.emit("get_data");
     }, 1000);
+    stop_btn.addEventListener("click", () =>
+    {
+      if(inter == null)
+      {
+        inter = setInterval(() => {
+          socket.emit("get_data");
+        }, 1000);
+        stop_btn.innerHTML = "stop";
+        socket.emit("start");
+        return;
+      }
+      clearInterval(inter);
+      inter = null;
+      stop_btn.innerHTML = "start";
+      socket.emit("stop");
+    });
   });
-  socket.on("data", function (data) {
-    console.log(data);
-    addData(data[0], data[1]);
+  socket.on("data", function (feed) {
+    console.log(feed);
+    addData(feed[0], feed[1]);
+    updateChart1(feed[2],data);
   });
 }
 function updateTable(data, names) {
