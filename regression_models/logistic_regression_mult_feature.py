@@ -53,7 +53,13 @@ def compute_cost(w,b,x,y):
     m = x.shape[0]
     z = np.dot(x,w) + b
     f = sigmoid(z)
-    total_cost = -np.sum(y * np.log(f) + (1 - y) * np.log(1 - f)) / m
+    cost = 0.
+    for i in range(m):
+        cost += -y[i] * np.log(f[i]) - (1-y[i])*np.log(1-f[i])
+        
+    return cost / m
+
+    # vectorized total_cost = -np.sum(y * np.log(f) + (1 - y) * np.log(1 - f)) / m
 
 def compute_cost_regularized_old(w,b,x,y,lambda_):
     m,n = x.shape
@@ -149,5 +155,11 @@ if __name__ == '__main__':
     # plot_classification(x_train,y_train,x_train2,y_train2)
     # plt.plot(x_train,bad_model,label = 'bad model')
 
+    oldcost = compute_cost(w,b,x_train,y_train)
+    print(oldcost)
+    cost1 = compute_cost(wn,bn,x_train,y_train)
+    print(cost1)
+    cost2 = compute_cost_regularized(wn,bn,x_train,y_train,0.4)
+    print(cost2)
     plt.legend()
     plt.show()

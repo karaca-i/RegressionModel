@@ -93,11 +93,12 @@ def learn_logistic(client_sid, msg):
     for i in msg["data"]:
         i[0] = i[0]>0
     print(msg)
-    return
-
+     
     arr = msg["data"]
 
     y = np.array([i[0] for i in arr])
+    y = y.astype(int)
+    
     for i in arr:
         i.pop(0)
         
@@ -135,10 +136,10 @@ def learn_logistic(client_sid, msg):
         if (isSingle):
             dj_dw_cost, dj_db_cost = log_single.compute_gradient(w_cost,b_cost,x,y)
             curr_cost = log_single.compute_cost(w_cost,b_cost,x,y) 
-            # TODO regularized cost add
         else: 
             dj_dw_cost, dj_db_cost = log_mult.compute_reg_gradient(w_cost,b_cost,x,y,lambd)
-            curr_cost = log_mult.compute_cost(w_cost,b_cost,x,y)
+            curr_cost = log_mult.compute_cost_regularized(w_cost,b_cost,x,y,lambd)
+            # TODO regularized cost add
             
         # finding the model's current state
         if (isSingle):
@@ -154,9 +155,9 @@ def learn_logistic(client_sid, msg):
         w_cost = w_cost - alpha*dj_dw_cost
         b_cost = b_cost - alpha*dj_db_cost
         # sending the data to the server
-        client_data[client_sid] = (i,curr_cost)
+        client_data[client_sid] = (i,curr_cost,list(f))
         # print(w,b)
-        i+=1    
+        i+=1
     
 @app.route("/")
 def index():
