@@ -1,11 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from utils.plot import plot_data
-from utils.normalize import zscore_normalize_features
-from utils.plot import plot_classification
+# from utils.plot import plot_data
+# from utils.plot import plot_classification
 
 # x1 = size, x2 = age, y = if has tumor or not
+def zscore_normalize_features(X,rtn_ms=False):
+    mu     = np.mean(X,axis=0)  
+    sigma  = np.std(X,axis=0)
+    X_norm = (X - mu)/sigma      
 
+    if rtn_ms:
+        return(X_norm, mu, sigma)
+    else:
+        return(X_norm)
+    
 def get_model_old(w,b,x):
     # w is a 1-d array, x is 2-d array
     m, n = x.shape
@@ -117,19 +125,19 @@ def gradient_descent(w,b,x,y,alpha,lambda_,iters):
         
     return w_new,b_new
 
+if __name__ == '__main__':
+    x_train = np.array([0., 1, 2, 3, 4, 5])
+    y_train = np.array([0,  0, 0, 1, 1, 1])
+    x_train2 = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
+    y_train2 = np.array([0, 0, 0, 1, 1, 1])
 
-x_train = np.array([0., 1, 2, 3, 4, 5])
-y_train = np.array([0,  0, 0, 1, 1, 1])
-x_train2 = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
-y_train2 = np.array([0, 0, 0, 1, 1, 1])
 
+    w = np.array([0.,0.2])
+    b = 1.
 
-w = np.array([0.,0.2])
-b = 1.
+    bad_model = get_model(w,b,x_train2)
 
-bad_model = get_model(w,b,x_train2)
-
-plot_classification(x_train,y_train,x_train2,y_train2)
-# plt.plot(x_train,bad_model,label = 'bad model')
+    # plot_classification(x_train,y_train,x_train2,y_train2)
+    # plt.plot(x_train,bad_model,label = 'bad model')
 
 

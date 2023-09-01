@@ -1,9 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def zscore_normalize_features(X,rtn_ms=False):
+    mu     = np.mean(X,axis=0)  
+    sigma  = np.std(X,axis=0)
+    X_norm = (X - mu)/sigma      
 
+    if rtn_ms:
+        return(X_norm, mu, sigma)
+    else:
+        return(X_norm)
+    
 def get_model(w,b,x):
-    return np.dot(x,w)+b
+    normalized_x = zscore_normalize_features(x)
+    return np.dot(normalized_x,w)+b
 
 def compute_cost_old(w,b,x,y):
     m,n = x.shape
@@ -12,7 +22,7 @@ def compute_cost_old(w,b,x,y):
 def compute_cost(w,b,x,y):
     m,n = x.shape
     
-    f = np.dot(x,w) + b
+    f = get_model(w,b,x)
     err = np.square(f-y)
     total_cost = np.sum(err) / (2*m)
     return total_cost
@@ -39,7 +49,7 @@ def compute_gradient_old(w,b,x,y):
 def compute_gradient(w,b,x,y):
     m= x.shape[0]
     
-    f = np.dot(x,w) + b
+    f = get_model(w,b,x)
     err = f - y
     dj_dw = np.dot(x.T,err) / m
     dj_db = np.sum(err) / m

@@ -9,6 +9,7 @@ def get_model_old(w,b,x):
     
     return f
 
+# no need to do normalization for single featured model
 def get_model(w,b,x):
     f = np.dot(w,x) + b
     return f 
@@ -81,21 +82,22 @@ def get_generalized_model(w,b,x,y,alpha,iters):
     return f
 
 
-# testing
-x_train = np.array([1.0,2.4,4.0,7.0])
-y_train = np.array([300.0,500.0,900.0,2100.0])
-plt.scatter(x_train,y_train,marker='x',c='r',label = "House Pricing")
+if __name__ == '__main__':
+    # testing
+    x_train = np.array([1.0,2.4,4.0,7.0])
+    y_train = np.array([300.0,500.0,900.0,2100.0])
+    plt.scatter(x_train,y_train,marker='x',c='r',label = "House Pricing")
 
-w_in = 0
-b_in = 200
-bad_model = get_model(w_in,b_in,x_train)
-plt.plot(x_train,bad_model,label="bad model")
+    w_in = 0
+    b_in = 200
+    bad_model = get_model(w_in,b_in,x_train)
+    plt.plot(x_train,bad_model,label="bad model")
 
-good_model = get_generalized_model(w_in,b_in,x_train,y_train,alpha = 1.0e-2,iters = 10000)
-plt.plot(x_train,good_model,label = "trained model")
+    good_model = get_generalized_model(w_in,b_in,x_train,y_train,alpha = 1.0e-2,iters = 10000)
+    plt.plot(x_train,good_model,label = "trained model")
 
-plt.legend()
-plt.show()
+    plt.legend()
+    plt.show()
 
     
     
