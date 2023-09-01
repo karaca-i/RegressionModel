@@ -65,12 +65,10 @@ function addData(label, newData) {
   chart_obj.update();
 }
 
-function updateChart1(f, data)
-{
-  for(let i=0; i<data.length; i++)
-  {
+function updateChart1(f, data) {
+  for (let i = 0; i < data.length; i++) {
     chart1_obj.data.labels[i] = i;
-    chart1_obj.data.datasets[0].data[i] = (data[i][0] > 0) ? 1 : 0;
+    chart1_obj.data.datasets[0].data[i] = data[i][0] > 0 ? 1 : 0;
     chart1_obj.data.datasets[1].data[i] = f[i];
   }
   chart1_obj.update();
@@ -78,11 +76,11 @@ function updateChart1(f, data)
 
 let data = [
   [1, 2.6, 3, 20],
-  [-1, 3., 4, 15],
+  [-1, 3, 4, 15],
   [1, 3.6, 3, 30],
-  [1, 4., 5, 8],
+  [1, 4, 5, 8],
 ];
-let names = ["Price", "Area", "Bedrooms", "Age"];
+let names = ["Has Tumor", "Size", "Mass", "Age"];
 updateTable(data, names);
 updateLearnCard();
 
@@ -100,13 +98,12 @@ function addGridEventListeners(td) {
     if (td.classList.contains("grid-clicked")) {
       return;
     }
-    if(td.dataset.j == 0)
-    {
+    if (td.dataset.j == 0) {
       let i = td.dataset.i;
       let j = td.dataset.j;
-      if(data[i][j] > 0) data[i][j] = -1;
+      if (data[i][j] > 0) data[i][j] = -1;
       else data[i][j] = 1;
-      updateTable(data,names);
+      updateTable(data, names);
       return;
     }
     td.classList.remove("table-active");
@@ -402,23 +399,19 @@ function startLearning(alpha, lambda) {
   let graph_title = document.getElementById("graph_title");
   let stop_btn = document.getElementById("stop_btn");
   let pin_btn = document.getElementById("exit_btn");
-  stop_btn.addEventListener("mouseover", () =>
-  {
+  stop_btn.addEventListener("mouseover", () => {
     stop_btn.classList.add("bg-secondary");
     stop_btn.classList.add("text-light");
   });
-  stop_btn.addEventListener("mouseout", () =>
-  {
+  stop_btn.addEventListener("mouseout", () => {
     stop_btn.classList.remove("bg-secondary");
     stop_btn.classList.remove("text-light");
   });
-  pin_btn.addEventListener("mouseover", () =>
-  {
+  pin_btn.addEventListener("mouseover", () => {
     pin_btn.classList.add("bg-secondary");
     pin_btn.classList.add("text-light");
   });
-  pin_btn.addEventListener("mouseout", () =>
-  {
+  pin_btn.addEventListener("mouseout", () => {
     pin_btn.classList.remove("bg-secondary");
     pin_btn.classList.remove("text-light");
   });
@@ -436,17 +429,15 @@ function startLearning(alpha, lambda) {
     chart1_obj.update();
     let col = document.getElementById("graph_col");
     col.classList.add("d-none");
-    updateTable(data,names);
+    updateTable(data, names);
   });
   socket.on("connect", function () {
     socket.emit("learn_logistic", { data: data, alpha: alpha, lambda: lambda });
     let inter = setInterval(() => {
       socket.emit("get_data");
     }, 1000);
-    stop_btn.addEventListener("click", () =>
-    {
-      if(inter == null)
-      {
+    stop_btn.addEventListener("click", () => {
+      if (inter == null) {
         inter = setInterval(() => {
           socket.emit("get_data");
         }, 1000);
@@ -463,7 +454,7 @@ function startLearning(alpha, lambda) {
   socket.on("data", function (feed) {
     console.log(feed);
     addData(feed[0], feed[1]);
-    updateChart1(feed[2],data);
+    updateChart1(feed[2], data);
   });
 }
 function updateTable(data, names) {
@@ -515,7 +506,7 @@ function updateTable(data, names) {
       td.dataset.j = j;
       if (data[i].length !== j) {
         td.innerHTML = "" + data[i][j];
-        if(j == 0) td.innerHTML = (data[i][j] > 0);
+        if (j == 0) td.innerHTML = data[i][j] > 0;
         addGridEventListeners(td);
       }
       tr.appendChild(td);
