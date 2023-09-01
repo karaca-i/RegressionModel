@@ -1,6 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def zscore_normalize_features(X,rtn_ms=False):
+    mu     = np.mean(X,axis=0)  
+    sigma  = np.std(X,axis=0)
+    X_norm = (X - mu)/sigma      
+
+    if rtn_ms:
+        return(X_norm, mu, sigma)
+    else:
+        return(X_norm)
+    
 def get_model_old(w,b,x):
     m = x.shape[0]
 
@@ -63,10 +73,11 @@ def compute_gradient(w,b,x,y):
     
     return dj_dw, dj_db
 
-def gradient_decent(w_in,b_in, x,y,alpha,iters):
+def gradient_decent(w_in,b_in, x_in,y,alpha,iters):
     w = w_in
     b = b_in 
     
+    x = zscore_normalize_features(x_in)
     for i in range(iters):
         dj_dw, dj_db = compute_gradient(w,b,x,y)
         w -= alpha * dj_dw
@@ -93,7 +104,9 @@ if __name__ == '__main__':
     bad_model = get_model(w_in,b_in,x_train)
     plt.plot(x_train,bad_model,label="bad model")
 
-    good_model = get_generalized_model(w_in,b_in,x_train,y_train,alpha = 1.0e-2,iters = 10000)
+    w,b = gradient_decent(w_in,b_in,x_train,y_train,1e-2,10000)
+    xx = zscore_normalize_features(x_train)
+    good_model = get_model(w,b,xx)
     plt.plot(x_train,good_model,label = "trained model")
 
     plt.legend()

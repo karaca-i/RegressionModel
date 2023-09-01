@@ -12,8 +12,8 @@ def zscore_normalize_features(X,rtn_ms=False):
         return(X_norm)
     
 def get_model(w,b,x):
-    normalized_x = zscore_normalize_features(x)
-    return np.dot(normalized_x,w)+b
+    # normalized_x = zscore_normalize_features(x)
+    return np.dot(x,w) + b
 
 def compute_cost_old(w,b,x,y):
     m,n = x.shape
@@ -56,16 +56,17 @@ def compute_gradient(w,b,x,y):
     
     return dj_dw, dj_db
 
-def gradient_decent(w_in,b_in, x,y,alpha,iters):
-    m,n = x.shape
+def gradient_decent(w_in,b_in, x_in,y,alpha,iters):
+    m,n = x_in.shape
     
+    x = zscore_normalize_features(x_in)
     w = w_in # nparray
     b = b_in # scalar
     
     for i in range(iters):
         dj_dw, dj_db = compute_gradient(w,b,x,y)
-        w -= alpha * dj_dw
-        b -= alpha * dj_db
+        w = w - alpha * dj_dw
+        b = b - alpha * dj_db
     
     return w,b
 
@@ -79,16 +80,20 @@ def get_generalized_model(w,b,x,y,alpha,iters):
 # testing
 
 if __name__ == "__main__":
-    x_train = np.array([[1,10],[2,12],[4,22],[9,32]]) #size 1.000feet, bedrooms
-    y_train = np.array([300,500,900,2100])
+    # x_train = np.array([[1,10],[2,12],[4,22],[9,32]]) #size 1.000feet, bedrooms
+    # y_train = np.array([300,500,900,2100])
 
-    w_in = np.array([0.3,0.2])
+    x_train = np.array([[2.6,3,20],[3.0,4,15],[3.6,3,30],[4.,5,8]]) #size 1.000feet, bedrooms
+    y_train = np.array([550.,565.,595,760.])
+    
+    w_in = np.array([0.3,0.2,0.1])
     b_in = 100
     bad_model = get_model(w_in, b_in, x_train)
     print(f"actual: {y_train[0]}, bad model: {bad_model[0]}")
 
-    w,b = gradient_decent(w_in, b_in, x_train, y_train, alpha = 4.0e-3, iters = 10000)
-    trained_model = get_model(w,b,x_train)
+    w,b = gradient_decent(w_in, b_in, x_train, y_train, alpha = 4.0e-2, iters = 10000)
+    xx = zscore_normalize_features(x_train)
+    trained_model = get_model(w,b,xx)
     total_cost = compute_cost(w,b,x_train,y_train)
     print(f"actual: {y_train[0]}, trained model: {trained_model[0]}, cost: {total_cost}")
 

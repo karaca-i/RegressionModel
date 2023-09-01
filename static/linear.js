@@ -35,10 +35,10 @@ function addData(label, newData) {
 }
 
 let data = [
-  [550000, 2600, 3, 20],
-  [565000, 3000, 4, 15],
-  [595000, 3600, 3, 30],
-  [760000, 4000, 5, 8],
+  [550, 2.6, 3, 20],
+  [565, 3., 4, 15],
+  [595, 3.6, 3, 30],
+  [760, 4., 5, 8],
 ];
 let names = ["Price", "Area", "Bedrooms", "Age"];
 updateTable(data, names);
