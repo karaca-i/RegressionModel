@@ -1,1 +1,1 @@
-flask --app app run
+python app.py

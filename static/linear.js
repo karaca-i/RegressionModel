@@ -1,10 +1,47 @@
+const ctx = document.getElementById('curve');
+
+let chart_obj = new Chart(ctx, {
+  type : 'line',
+  data : {
+    labels : [],
+    datasets : [
+        {
+          data : [],
+          label : "Cost / Iteration Curve",
+          borderColor : "#3cba9f",
+          fill : false
+        }]
+  },
+  options : {
+    title : {
+      display : true,
+      text : 'Chart JS Line Chart Example'
+    },
+    elements: {
+      point:{
+          radius: 0
+      }
+    }
+  }
+});
+
+function addData(label, newData) {
+  chart_obj.data.labels.push(label);
+  chart_obj.data.datasets.forEach((dataset) => {
+      dataset.data.push(newData);
+  });
+  chart_obj.update();
+}
+
 let data = [
-    [31,3213,3213,312],
-    [321,343,343,3152],
-    [321,343,343,3152],
+    [550000,2600,3,20],
+    [565000,3000,4,15],
+    [595000,3600,3,30],
+    [760000,4000,5,8],
   ]
-  let names = ["Price", "Area", "Floors", "Stuff"]
+  let names = ["Price", "Area", "Bedrooms", "Age"]
   updateTable(data,names);
+  updateLearnCard();
 
   function addGridEventListeners(td)
   {
@@ -232,6 +269,118 @@ let data = [
       col.classList.add("d-none");
     });
   }
+  function updateLearnCard()
+  {
+    let inc_lambda = document.getElementById("inc_lambda");
+    let dec_lambda = document.getElementById("dec_lambda");
+    let lambda_val = document.getElementById("lambda_val");
+    let inc_alpha = document.getElementById("inc_alpha");
+    let dec_alpha = document.getElementById("dec_alpha");
+    let alpha_val = document.getElementById("alpha_val");
+    inc_alpha.addEventListener("mouseover", () => {
+      inc_alpha.classList.add("bg-secondary");
+      inc_alpha.classList.add("text-light");
+    });
+    inc_alpha.addEventListener("mouseout", () => {
+      inc_alpha.classList.remove("bg-secondary");
+      inc_alpha.classList.remove("text-light");
+    });
+    inc_alpha.addEventListener("click", () => {
+      let nval = parseFloat(alpha_val.innerHTML);
+      nval = (Math.round(nval * 1000) + 1) / 1000;
+      alpha_val.innerHTML = nval;
+    });
+    dec_alpha.addEventListener("mouseover", () => {
+      dec_alpha.classList.add("bg-secondary");
+      dec_alpha.classList.add("text-light");
+    });
+    dec_alpha.addEventListener("mouseout", () => {
+      dec_alpha.classList.remove("bg-secondary");
+      dec_alpha.classList.remove("text-light");
+    });
+    dec_alpha.addEventListener("click", () => {
+      let nval = parseFloat(alpha_val.innerHTML);
+      nval = (Math.round(nval * 1000) - 1) / 1000;
+      if(nval < 0) n_val = 0;
+      alpha_val.innerHTML = nval;
+    });
+    inc_lambda.addEventListener("mouseover", () => {
+      inc_lambda.classList.add("bg-secondary");
+      inc_lambda.classList.add("text-light");
+    });
+    inc_lambda.addEventListener("mouseout", () => {
+      inc_lambda.classList.remove("bg-secondary");
+      inc_lambda.classList.remove("text-light");
+    });
+    inc_lambda.addEventListener("click", () => {
+      let nval = parseFloat(lambda_val.innerHTML);
+      nval = (Math.round(nval * 1000) + 1) / 1000;
+      lambda_val.innerHTML = nval;
+    });
+    dec_lambda.addEventListener("mouseover", () => {
+      dec_lambda.classList.add("bg-secondary");
+      dec_lambda.classList.add("text-light");
+    });
+    dec_lambda.addEventListener("mouseout", () => {
+      dec_lambda.classList.remove("bg-secondary");
+      dec_lambda.classList.remove("text-light");
+    });
+    dec_lambda.addEventListener("click", () => {
+      let nval = parseFloat(lambda_val.innerHTML);
+      nval = (Math.round(nval * 1000) - 1) / 1000;
+      if(nval < 0) nval = 0;
+      lambda_val.innerHTML = nval;
+    });
+    let learn_cancel = document.getElementById("learn_cancel");
+    learn_cancel.addEventListener("mouseover", () => {
+      learn_cancel.classList.remove("bg-danger");
+      learn_cancel.classList.add("lighter-red");
+    });
+    learn_cancel.addEventListener("mouseout", () => {
+      learn_cancel.classList.remove("lighter-red");
+      learn_cancel.classList.add("bg-danger");
+    });
+    learn_cancel.addEventListener("click", () => {
+      let col = document.getElementById("learn_col");
+      col.classList.add("d-none");
+      updateTable(data,names);
+    });
+    let learn_start = document.getElementById("learn_start");
+    learn_start.addEventListener("mouseover", () => {
+      learn_start.classList.remove("bg-success");
+      learn_start.classList.add("lighter-green");
+    });
+    learn_start.addEventListener("mouseout", () => {
+      learn_start.classList.remove("lighter-green");
+      learn_start.classList.add("bg-success");
+    });
+    learn_start.addEventListener("click", () => {
+      let col = document.getElementById("learn_col");
+      col.classList.add("d-none");
+      let graph_col = document.getElementById("graph_col");
+      graph_col.classList.remove("d-none");
+      let alpha = parseFloat(alpha_val.innerHTML);
+      let lambda = parseFloat(lambda_val.innerHTML);
+      startLearning(alpha,lambda);
+    });
+  }
+  function startLearning(alpha, lambda)
+  {
+
+    let graph_title = document.getElementById("graph_title");
+    graph_title.innerHTML = 
+      "Learning Curve | α=" + alpha + ", λ=" + lambda;
+    var socket = io();
+    socket.on('connect', function() {
+      socket.emit("learn", {"data":data, "alpha":alpha, "lambda":lambda});
+      setInterval(() => {
+        socket.emit("get_data");
+      } ,1000);
+    });
+    socket.on('data', function(data) {
+      addData(data[0],data[1]);
+    });
+  }
   function updateTable(data, names)
   {
     let table = document.getElementById("reg-table");
@@ -311,4 +460,17 @@ let data = [
     done_btn.className = "text-center bg-success text-light";
     done_btn.innerHTML = 'Done';
     tr.appendChild(done_btn);
-  }
+    done_btn.addEventListener("mouseover", () => {
+      done_btn.classList.remove("bg-success");
+      done_btn.classList.add("lighter-green");
+    });
+    done_btn.addEventListener("mouseout", () => {
+      done_btn.classList.remove("lighter-green");
+      done_btn.classList.add("bg-success");
+    });
+    done_btn.addEventListener("click", () => {
+      let learn_col = document.getElementById("learn_col");
+      learn_col.classList.remove("d-none");
+      table.replaceWith(table.cloneNode(true));
+    });
+   }

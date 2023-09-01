@@ -1,6 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from utils.normalize import zscore_normalize_features
+
+
+def zscore_normalize_features(X,rtn_ms=False):
+    mu     = np.mean(X,axis=0)  
+    sigma  = np.std(X,axis=0)
+    X_norm = (X - mu)/sigma      
+
+    if rtn_ms:
+        return(X_norm, mu, sigma)
+    else:
+        return(X_norm)
 
 def get_model_old(w,b,x):
     m,n = x.shape
@@ -150,53 +160,47 @@ def get_regularized_model(w,b,x,y,alpha,lambda_,iters):
 
 # testing
 
-#x_train = np.array([[1,10,3],[2,12,4],[4,22,3],[9,32,8]]) # size, rooms, restrooms
-y_train = np.array([300,500,900,2100,3100,4100,5900,7100,9100,11100,14100,22100])
-x_indices = np.arange(0,12)
-plt.scatter(x_indices,y_train,marker = 'x',c='r',label="actual prices")
+if __name__ == "__main__":
+    #x_train = np.array([[1,10,3],[2,12,4],[4,22,3],[9,32,8]]) # size, rooms, restrooms
+    y_train = np.array([300,500,900,2100,3100,4100,5900,7100,9100,11100,14100,22100])
+    x_indices = np.arange(0,12)
+    plt.scatter(x_indices,y_train,marker = 'x',c='r',label="actual prices")
 
-num_houses = 12
-num_features = 3
+    num_houses = 12
+    num_features = 3
 
-# Define increasing values for each feature
-sizes = np.linspace(1, 20, num_houses)  # Increasing sizes from 100 to 300 sq. ft.
-bedrooms = np.arange(30, 54, 2)    # Increasing bedroom counts from 1 to 12
-bathrooms = np.arange(2, num_houses + 2)   # Increasing bathroom counts from 1 to 12
+    # Define increasing values for each feature
+    sizes = np.linspace(1, 20, num_houses)  # Increasing sizes from 100 to 300 sq. ft.
+    bedrooms = np.arange(30, 54, 2)    # Increasing bedroom counts from 1 to 12
+    bathrooms = np.arange(2, num_houses + 2)   # Increasing bathroom counts from 1 to 12
 
-# Combine the features into a 2D array
-x_train2 = np.column_stack((sizes, bedrooms, bathrooms))
+    # Combine the features into a 2D array
+    x_train2 = np.column_stack((sizes, bedrooms, bathrooms))
 
-w_in = np.array([3.0,2.0,1.0])
-b_in = 100.
-bad_model = get_model(w_in, b_in, x_train2)
-# plt.plot(x_indices, y_train,label="target model")
-plt.plot(x_indices,bad_model,label = "bad model")
+    w_in = np.array([3.0,2.0,1.0])
+    b_in = 100.
+    bad_model = get_model(w_in, b_in, x_train2)
+    # plt.plot(x_indices, y_train,label="target model")
+    plt.plot(x_indices,bad_model,label = "bad model")
 
-# Now let's create the trained model
-alpha = 1.0e-3
-trained_model = get_regularized_model(w_in,b_in,x_train2,y_train,alpha,lambda_=1e-3, iters = 10000)
-plt.plot(x_indices,trained_model, label="trained model")
-plt.legend()
-plt.show()
-plt.close()
-
-
-# test the cost function
-w,b, reg_J, non_reg_J, w_history = gradient_decent(w_in,b_in,x_train2,y_train,alpha,lambda_=1e-3, iters = 10000)
-
-w_ind = np.arange(len(w_history))
-plt.plot(w_ind,non_reg_J,label = "Cost Function")
-plt.plot(w_ind,reg_J,label = 'regularized') # after regularization, total cost is going to increase slightly but we will prevent overfitting.
-
-plt.xlabel("w values")
-plt.ylabel("total cost")
-plt.legend()
-plt.show()
-plt.close()
+    # Now let's create the trained model
+    alpha = 1.0e-3
+    trained_model = get_regularized_model(w_in,b_in,x_train2,y_train,alpha,lambda_=1e-3, iters = 10000)
+    plt.plot(x_indices,trained_model, label="trained model")
+    plt.legend()
+    plt.show()
+    plt.close()
 
 
+    # test the cost function
+    w,b, reg_J, non_reg_J, w_history = gradient_decent(w_in,b_in,x_train2,y_train,alpha,lambda_=1e-3, iters = 10000)
 
+    w_ind = np.arange(len(w_history))
+    plt.plot(w_ind,non_reg_J,label = "Cost Function")
+    plt.plot(w_ind,reg_J,label = 'regularized') # after regularization, total cost is going to increase slightly but we will prevent overfitting.
 
-
-    
-    
+    plt.xlabel("w values")
+    plt.ylabel("total cost")
+    plt.legend()
+    plt.show()
+    plt.close()

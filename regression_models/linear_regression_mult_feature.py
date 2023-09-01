@@ -67,27 +67,29 @@ def get_generalized_model(w,b,x,y,alpha,iters):
     return f
 
 # testing
-x_train = np.array([[1,10],[2,12],[4,22],[9,32]]) #size 1.000feet, bedrooms
-y_train = np.array([300,500,900,2100])
 
-w_in = np.array([0.3,0.2])
-b_in = 100
-bad_model = get_model(w_in, b_in, x_train)
-print(f"actual: {y_train[0]}, bad model: {bad_model[0]}")
+if __name__ == "__main__":
+    x_train = np.array([[1,10],[2,12],[4,22],[9,32]]) #size 1.000feet, bedrooms
+    y_train = np.array([300,500,900,2100])
 
-w,b = gradient_decent(w_in, b_in, x_train, y_train, alpha = 4.0e-3, iters = 10000)
-trained_model = get_model(w,b,x_train)
-total_cost = compute_cost(w,b,x_train,y_train)
-print(f"actual: {y_train[0]}, trained model: {trained_model[0]}, cost: {total_cost}")
+    w_in = np.array([0.3,0.2])
+    b_in = 100
+    bad_model = get_model(w_in, b_in, x_train)
+    print(f"actual: {y_train[0]}, bad model: {bad_model[0]}")
 
-x_axis = np.arange(0,4)
-plt.scatter(x_axis,y_train,marker = 'x', c='r',label = "actual prices")
-plt.plot(x_axis,bad_model,label = 'bad model')
-plt.plot(x_axis,trained_model,label ='trained model')
-plt.xlabel("house features")
-plt.ylabel("house prices (100k dollars)")
-plt.legend()
-plt.show()
+    w,b = gradient_decent(w_in, b_in, x_train, y_train, alpha = 4.0e-3, iters = 10000)
+    trained_model = get_model(w,b,x_train)
+    total_cost = compute_cost(w,b,x_train,y_train)
+    print(f"actual: {y_train[0]}, trained model: {trained_model[0]}, cost: {total_cost}")
+
+    x_axis = np.arange(0,4)
+    plt.scatter(x_axis,y_train,marker = 'x', c='r',label = "actual prices")
+    plt.plot(x_axis,bad_model,label = 'bad model')
+    plt.plot(x_axis,trained_model,label ='trained model')
+    plt.xlabel("house features")
+    plt.ylabel("house prices (100k dollars)")
+    plt.legend()
+    plt.show()
 
 
     
