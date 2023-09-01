@@ -26,7 +26,7 @@ def get_model_old(w,b,x):
 
 def get_model(w,b,x): 
     m, n = x.shape
-
+    
     z = np.dot(x,w) + b
     f = sigmoid(z)
     return f
