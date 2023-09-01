@@ -270,7 +270,7 @@ function updateLearnCard() {
   });
   inc_alpha.addEventListener("click", () => {
     let nval = parseFloat(alpha_val.innerHTML);
-    nval = (Math.round(nval * 1000) + 1) / 1000;
+    nval = (Math.round(nval * 10000) + 1) / 10000;
     alpha_val.innerHTML = nval;
   });
   dec_alpha.addEventListener("mouseover", () => {
@@ -283,7 +283,7 @@ function updateLearnCard() {
   });
   dec_alpha.addEventListener("click", () => {
     let nval = parseFloat(alpha_val.innerHTML);
-    nval = (Math.round(nval * 1000) - 1) / 1000;
+    nval = (Math.round(nval * 10000) - 1) / 10000;
     if (nval < 0) n_val = 0;
     alpha_val.innerHTML = nval;
   });
@@ -297,7 +297,7 @@ function updateLearnCard() {
   });
   inc_lambda.addEventListener("click", () => {
     let nval = parseFloat(lambda_val.innerHTML);
-    nval = (Math.round(nval * 1000) + 1) / 1000;
+    nval = (Math.round(nval * 10000) + 1) / 10000;
     lambda_val.innerHTML = nval;
   });
   dec_lambda.addEventListener("mouseover", () => {
@@ -310,7 +310,7 @@ function updateLearnCard() {
   });
   dec_lambda.addEventListener("click", () => {
     let nval = parseFloat(lambda_val.innerHTML);
-    nval = (Math.round(nval * 1000) - 1) / 1000;
+    nval = (Math.round(nval * 10000) - 1) / 10000;
     if (nval < 0) nval = 0;
     lambda_val.innerHTML = nval;
   });
@@ -352,7 +352,7 @@ function startLearning(alpha, lambda) {
   graph_title.innerHTML = "Learning Curve | α=" + alpha + ", λ=" + lambda;
   var socket = io();
   socket.on("connect", function () {
-    socket.emit("learn", { data: data, alpha: alpha, lambda: lambda });
+    socket.emit("learn_linear", { data: data, alpha: alpha, lambda: lambda });
     setInterval(() => {
       socket.emit("get_data");
     }, 1000);

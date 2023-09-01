@@ -79,19 +79,22 @@ def learn_linear(client_sid, msg):
         else: 
             dj_dw, dj_db = lin_mult.compute_gradient(w,b,x_normalized,y)
             f = lin_mult.get_model(w,b,x_normalized)
-        
         w = w - alpha * dj_dw
         b = b - alpha * dj_db
-        
         w_cost = w_cost - alpha*dj_dw_cost
         b_cost = b_cost - alpha*dj_db_cost
         # sending the data to the server
-        client_data[client_sid] = (i,curr_cost)
+        client_data[client_sid] = (i,curr_cost,list(f))
         # print(w,b)
         i+=1     
 
 def learn_logistic(client_sid, msg):
     print(msg)
+    for i in msg["data"]:
+        i[0] = i[0]>0
+    print(msg)
+    return
+
     arr = msg["data"]
 
     y = np.array([i[0] for i in arr])
@@ -179,13 +182,18 @@ def handle_disconnect():
 def get_data():
     sid = request.sid
     if sid in client_data:
-        emit("data",[client_data[sid][0],client_data[sid][1]])
+        emit("data",[client_data[sid][0],client_data[sid][1],client_data[sid][2]])
     else:
         emit("data", 0)
 
-@socketio.on("learn")
-def learn_start(msg):
+@socketio.on("learn_linear")
+def learn_linstart(msg):
     running.add(request.sid)
     Thread(target=learn_linear, args=(request.sid,msg,)).start()
+
+@socketio.on("learn_logistic")
+def learn_logstart(msg):
+    running.add(request.sid)
+    Thread(target=learn_logistic, args=(request.sid,msg,)).start()
 if __name__ == '__main__':
     socketio.run(app)
