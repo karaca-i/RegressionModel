@@ -74,7 +74,7 @@ Used for classification problems, the trained model determines the most suitable
 
 ![logregerr](https://github.com/karaca-i/RegressionModel/blob/main/images/logregerr.png)
 
-## Dependencies
+## Insallation
 Please use `Python 3.6` or higher.  
 
 Install from PyPi:
@@ -84,8 +84,10 @@ pip install numpy
 ```bash
 pip install flask
 ```
-
-Main motivation behind this project is understand how machine learning models are working behind the scenes and understanding the effects of changing: parameters, learning rate and regularization coefficient lambda of the models by
-visualizing by a graph.
-
-
+```bash
+pip install flask-socketio
+```
+To start the project:
+```bash
+python app.py
+```
