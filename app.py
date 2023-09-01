@@ -103,13 +103,24 @@ def learn_logistic(client_sid, msg):
     isSingle = len(arr[0]) <= 1
     w_in = 0. if isSingle else np.array([0. for i in arr[0]])
         
-    b_in = 100
+    b_in = 1.
     alpha = msg["alpha"]
     lambd = msg["lambda"]
     i = 1
+    
+    # zipping
+    combined = list(zip(x,y))
+    combined.sort(key=lambda pair:pair[1])
+    x,y = zip(*combined)
+    x = np.array(x)
+    y = np.array(y)
         
+    x_normalized = zscore_normalize_features(x)
+    
     w = w_in
     b = b_in
+    w_cost = w_in
+    b_cost = b_in
     while True:
         while client_sid not in running:
             if client_sid not in clients:
@@ -117,22 +128,32 @@ def learn_logistic(client_sid, msg):
         if client_sid not in clients:
             return
             
+        # cost state
+        if (isSingle):
+            dj_dw_cost, dj_db_cost = log_single.compute_gradient(w_cost,b_cost,x,y)
+            curr_cost = log_single.compute_cost(w_cost,b_cost,x,y) 
+            # TODO regularized cost add
+        else: 
+            dj_dw_cost, dj_db_cost = log_mult.compute_reg_gradient(w_cost,b_cost,x,y,lambd)
+            curr_cost = log_mult.compute_cost(w_cost,b_cost,x,y)
+            
         # finding the model's current state
         if (isSingle):
-            dj_dw, dj_db = lin_single.compute_gradient(w,b,x,y)
-            curr_cost = lin_single.compute_cost(w,b,x,y)
-            f = lin_single.get_model(w,b,x)
+            dj_dw, dj_db = log_single.compute_gradient(w,b,x_normalized,y)
+            f = log_single.get_model(w,b,x_normalized)
         else: 
-            dj_dw, dj_db = lin_mult.compute_gradient(w,b,x,y)
-            curr_cost = lin_mult.compute_cost(w,b,x,y)
-            f = lin_mult.get_model(w,b,x)
-            
+            dj_dw, dj_db = log_mult.compute_reg_gradient(w,b,x_normalized,y,lambd)
+            f = log_mult.get_model(w,b,x_normalized)
+        
         w = w - alpha * dj_dw
-        b = b - alpha * dj_db    
+        b = b - alpha * dj_db
+        
+        w_cost = w_cost - alpha*dj_dw_cost
+        b_cost = b_cost - alpha*dj_db_cost
         # sending the data to the server
         client_data[client_sid] = (i,curr_cost)
         # print(w,b)
-        i+=1   
+        i+=1    
     
 @app.route("/")
 def index():

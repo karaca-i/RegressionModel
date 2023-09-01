@@ -43,12 +43,12 @@ def compute_gradient(w,b,x,y):
 
     return dj_dw, dj_db
 
-def gradient_descent(w,b,x,y,alpha,iters):
-    m = x.shape[0]
+def gradient_descent(w,b,x_in,y,alpha,iters):
+    m = x_in.shape[0]
     
     w_new = w
     b_new = b
-    
+    x = zscore_normalize_features(x_in)
     for i in range(iters):
         dj_dw, dj_db = compute_gradient(w_new,b_new,x,y)
         w_new -= alpha * dj_dw
@@ -73,7 +73,8 @@ if __name__ == '__main__':
     bad_model = get_model(w, b,x_train)
     plt.plot(x_train,bad_model,label = 'bad model')
     wnew, bnew = gradient_descent(w,b,x_train,y_train,1e-1,10000)
-    good_model = get_model(wnew,bnew,x_train)
+    xx = zscore_normalize_features(x_train)
+    good_model = get_model(wnew,bnew,xx)
     plt.plot(x_train,good_model,label ='good model')
     plt.legend()
     plt.show()

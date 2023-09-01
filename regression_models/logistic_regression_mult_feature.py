@@ -15,9 +15,7 @@ def zscore_normalize_features(X,rtn_ms=False):
         return(X_norm)
     
 def get_model_old(w,b,x):
-    # w is a 1-d array, x is 2-d array
     m, n = x.shape
-    # x = zscore_normalize_features(x)
 
     f = np.zeros(m)
     for i in range(m):
@@ -26,10 +24,8 @@ def get_model_old(w,b,x):
 
     return f
 
-def get_model(w,b,x):
-    
+def get_model(w,b,x): 
     m, n = x.shape
-    # x = zscore_normalize_features(x)
 
     z = np.dot(x,w) + b
     f = sigmoid(z)
@@ -112,9 +108,10 @@ def compute_reg_gradient(w,b,x,y,lambda_):
 
     return dj_dw, dj_db
 
-def gradient_descent(w,b,x,y,alpha,lambda_,iters):
-    m,n = x.shape
+def gradient_descent(w,b,x_in,y,alpha,lambda_,iters):
+    m,n = x_in.shape
     
+    x = zscore_normalize_features(x_in)
     w_new = w
     b_new = b
     
@@ -126,18 +123,31 @@ def gradient_descent(w,b,x,y,alpha,lambda_,iters):
     return w_new,b_new
 
 if __name__ == '__main__':
-    x_train = np.array([0., 1, 2, 3, 4, 5])
-    y_train = np.array([0,  0, 0, 1, 1, 1])
-    x_train2 = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
-    y_train2 = np.array([0, 0, 0, 1, 1, 1])
+    x_train2 = np.array([0., 1, 2, 3, 4, 5])
+    y_train2 = np.array([0,  0, 0, 1, 1, 1])
+    x_train = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5],[0.5, 1.4],[0.8, 1.1]])
+    y_train = np.array([0, 0, 0, 1, 1, 1,0,0])
 
-
+    combined = list(zip(x_train,y_train))
+    combined.sort(key=lambda pair:pair[1])
+    x_train, y_train = zip(*combined)
+    x_train = np.array(x_train)
+    y_train = np.array(y_train)
+    
     w = np.array([0.,0.2])
     b = 1.
-
-    bad_model = get_model(w,b,x_train2)
-
+    
+    x_indices = np.arange(0,len(y_train))
+    bad_model = get_model(w,b,x_train)
+    plt.scatter(x_indices,y_train,marker='x',c='r',label = 'actual prices')
+    plt.plot(x_indices,bad_model,label = 'bad model')
+    
+    xx = zscore_normalize_features(x_train)
+    wn,bn = gradient_descent(w,b,x_train,y_train,1e-1,0,10000)
+    good_model = get_model(wn,bn,xx)
+    plt.plot(x_indices,good_model,label = 'trained model')
     # plot_classification(x_train,y_train,x_train2,y_train2)
     # plt.plot(x_train,bad_model,label = 'bad model')
 
-
+    plt.legend()
+    plt.show()
