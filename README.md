@@ -1,6 +1,6 @@
 # Regression Model Visualizer
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/) [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://regvis.ubien.co/)  
-Website: http://regvis.ubien.co/
+http://regvis.ubien.co/
 ## **Contributors**
 - **İbrahim Karaca**
   <img src="https://raw.githubusercontent.com/ultralytics/assets/main/social/logo-transparent.png" width="2.5%"/>
