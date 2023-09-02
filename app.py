@@ -32,6 +32,11 @@ def zscore_normalize_features(X,rtn_ms=False):
     else:
         return(X_norm)
 
+def rev_normalization(X_old,x_normalized,rtn_ms=False):
+    mu     = np.mean(X_old,axis=0)  
+    sigma  = np.std(X_old,axis=0)
+    x = (x_normalized * sigma) + mu
+    return x
             
 def learn_linear(client_sid, msg):
     print(msg)
@@ -43,6 +48,7 @@ def learn_linear(client_sid, msg):
         
     x = np.array(arr)
     x_normalized = zscore_normalize_features(x)
+    y_normalized = zscore_normalize_features(y)
     
     isSingle = len(arr[0]) <= 1
     w_in = 0. if isSingle else np.array([0. for i in arr[0]])
@@ -54,8 +60,7 @@ def learn_linear(client_sid, msg):
         
     w = w_in
     b = b_in
-    w_cost = w_in
-    b_cost = b_in
+    
     while True:
         while client_sid not in running:
             if client_sid not in clients:
@@ -63,30 +68,26 @@ def learn_linear(client_sid, msg):
         if client_sid not in clients:
             return
             
-        # cost state
-        if (isSingle):
-            dj_dw_cost, dj_db_cost = lin_single.compute_gradient(w_cost,b_cost,x,y)
-            curr_cost = lin_single.compute_cost(w_cost,b_cost,x,y)
-
-        else: 
-            dj_dw_cost, dj_db_cost = lin_mult.compute_gradient(w_cost,b_cost,x,y)
-            curr_cost = lin_mult.compute_cost(w_cost,b_cost,x,y)
             
         # finding the model's current state
+        curr_cost = 0.
         if (isSingle):
-            dj_dw, dj_db = lin_single.compute_gradient(w,b,x_normalized,y)
+            dj_dw, dj_db = lin_single.compute_gradient(w,b,x_normalized,y_normalized)
+            curr_cost = lin_single.compute_cost(w,b,x_normalized,y_normalized)
             f = lin_single.get_model(w,b,x_normalized)
         else: 
-            dj_dw, dj_db = lin_mult.compute_gradient(w,b,x_normalized,y)
+            dj_dw, dj_db = lin_mult.compute_gradient(w,b,x_normalized,y_normalized)
+            curr_cost = lin_mult.compute_cost(w,b,x_normalized,y_normalized)
             f = lin_mult.get_model(w,b,x_normalized)
         w = w - alpha * dj_dw
         b = b - alpha * dj_db
-        w_cost = w_cost - alpha*dj_dw_cost
-        b_cost = b_cost - alpha*dj_db_cost
+
+        f = rev_normalization(y,f)
+        
         # sending the data to the server
         client_data[client_sid] = (i,curr_cost,list(f))
         # print(w,b)
-        i+=1     
+        i+=1 
 
 def learn_logistic(client_sid, msg):
     print(msg)
