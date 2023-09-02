@@ -1,23 +1,4 @@
 # Regression Model Visualizer
-A technical project designed to enable the creation of various types of simple machine learning models.
-Once you create a model, you can observe its training performance and effectiveness **in real-time through graphical 
-representations.**
-
-The unique aspect of this project 
-is that **it doesn't rely on** external machine learning libraries; instead, all functionalities are implemented from scratch. 
-The project **offers control over factors** like **learning rate**, **regularization coefficient**, and other 
-variables that influence the model's behavior and efficiency.
-
-<h3 align="left">Motivation</h3>  
-Discovering insights for inquiries like:
-
-- How does adjusting the learning rate influence the accuracy of model training?
-- How can excessive regularization of model parameters lead to underfitting instead of preventing overfitting?
-
-Or even though you do not understand the basics of machine learning, you can just enjoy investigating the learning process of your self-created models, and play around.
-
-<h3 align="left">Languages and Tools</h3>
-<p align="left"> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a>  <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> </a> <a href="https://heroku.com" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" alt="heroku" width="40" height="40"/> </a>  </p>
 
 ## **Contributors**
 - **İbrahim Karaca**
@@ -43,7 +24,27 @@ Or even though you do not understand the basics of machine learning, you can jus
             src="https://media.roboflow.com/notebooks/template/icons/purple/github.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672949633691"
             width="2.5%"
           />
-      </a>
+      </a>  
+
+A technical project designed to enable the creation of various types of simple machine learning models.
+Once you create a model, you can observe its training performance and effectiveness **in real-time through graphical 
+representations.**
+
+The **unique aspect** of this project 
+is that <ins>**it doesn't rely on**</ins> external machine learning libraries; instead, all functionalities are implemented from scratch. 
+The project **offers control over factors** like learning rate, regularization coefficient, and other 
+variables that influence the model's behavior and efficiency.
+
+<h3 align="left">Motivation</h3>  
+Discovering insights for inquiries like:  
+
+- How does adjusting the learning rate influence the accuracy of model training?
+- How can excessive regularization of model parameters lead to underfitting instead of preventing overfitting?
+
+Or even though you do not understand the basics of machine learning, you can just enjoy investigating the learning process of your self-created models, play around, and predict outputs using your own trained model.
+
+<h3 align="left">Languages and Tools</h3>
+<p align="left"> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a>  <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> </a> <a href="https://socket.io/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/socketio/socketio-icon.svg" alt="socketio" width="40" height="40"/> </a> <a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.chartjs.org" target="_blank" rel="noreferrer"> <img src="https://www.chartjs.org/media/logo-title.svg" alt="chartjs" width="40" height="40"/> </a> </p> 
 
 ## Models
 The functions of all the subsequent models, depending on their feature counts, are derived by:
@@ -79,15 +80,13 @@ Please use `Python 3.6` or higher.
 
 Install from PyPi:
 ```bash
-pip install numpy
+pip install -r requirements.txt
 ```
-```bash
-pip install flask
-```
-```bash
-pip install flask-socketio
-```
-To start the project:
+
+requirements.txt includes: `numpy`, `flask`, `flask-socketio==5.2.0`, `matplotlib`  
+matplotlib is optional, in case you want to test your models. We use chart.js for graphical representations.  
+
+To start the project (developer server):
 ```bash
 python app.py
 ```
