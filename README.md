@@ -74,7 +74,7 @@ Used for classification problems, the trained model determines the most suitable
 
 ![logregerr](https://github.com/karaca-i/RegressionModel/blob/main/images/logregerr.png)
 
-## Insallation
+## Build
 Please use `Python 3.6` or higher.  
 
 Install from PyPi:
