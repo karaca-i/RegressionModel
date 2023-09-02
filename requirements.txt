@@ -2,4 +2,4 @@ flask
 flask-socketio==5.2.0
 numpy
 matplotlib
-eventlet
+waitress

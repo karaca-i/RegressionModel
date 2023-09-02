@@ -208,4 +208,6 @@ def start():
     running.add(request.sid)
 
 if __name__ == '__main__':
-    socketio.run(app,port=80)
+    from waitress import serve
+    serve(app,host = "0.0.0.0", port = 8080)
+    # socketio.run(app)
