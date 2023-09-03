@@ -53,7 +53,7 @@ def learn_linear(client_sid, msg):
     isSingle = len(arr[0]) <= 1
     w_in = 0. if isSingle else np.array([0. for i in arr[0]])
         
-    b_in = 100
+    b_in = 50.
     alpha = msg["alpha"]
     lambd = msg["lambda"]
     i = 1
@@ -76,8 +76,8 @@ def learn_linear(client_sid, msg):
             curr_cost = lin_single.compute_cost(w,b,x_normalized,y_normalized)
             f = lin_single.get_model(w,b,x_normalized)
         else: 
-            dj_dw, dj_db = lin_mult.compute_gradient(w,b,x_normalized,y_normalized)
-            curr_cost = lin_mult.compute_cost(w,b,x_normalized,y_normalized)
+            dj_dw, dj_db = lin_mult.compute_reg_gradient(w,b,x_normalized,y_normalized,lambd)
+            curr_cost = lin_mult.compute_reg_cost(w,b,x_normalized,y_normalized,lambd)
             f = lin_mult.get_model(w,b,x_normalized)
         w = w - alpha * dj_dw
         b = b - alpha * dj_db

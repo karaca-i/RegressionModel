@@ -27,6 +27,14 @@ def compute_cost(w,b,x,y):
     total_cost = np.sum(err) / (2*m)
     return total_cost
 
+def compute_reg_cost(w,b,x,y,lambda_):
+    m,n = x.shape
+    
+    non_reg_cost = compute_cost(w,b,x,y)
+    reg_cost = np.sum(w**2) * lambda_ / (2*m)
+    
+    return non_reg_cost + reg_cost
+
     
 def compute_gradient_old(w,b,x,y):
     m,n = x.shape
@@ -56,7 +64,14 @@ def compute_gradient(w,b,x,y):
     
     return dj_dw, dj_db
 
-def gradient_decent(w_in,b_in, x_in,y,alpha,iters):
+def compute_reg_gradient(w,b,x,y,lambda_):
+    
+    dj_dw, dj_db = compute_gradient(w,b,x,y)
+    dj_dw += np.dot(lambda_,w) / x.shape[0]
+    
+    return dj_dw, dj_db
+
+def gradient_decent(w_in,b_in, x_in,y,alpha,iters,lambda_):
     m,n = x_in.shape
     
     x = zscore_normalize_features(x_in)
@@ -64,7 +79,7 @@ def gradient_decent(w_in,b_in, x_in,y,alpha,iters):
     b = b_in # scalar
     
     for i in range(iters):
-        dj_dw, dj_db = compute_gradient(w,b,x,y)
+        dj_dw, dj_db = compute_reg_gradient(w,b,x,y,lambda_)
         w = w - alpha * dj_dw
         b = b - alpha * dj_db
     
@@ -91,7 +106,7 @@ if __name__ == "__main__":
     bad_model = get_model(w_in, b_in, x_train)
     print(f"actual: {y_train[0]}, bad model: {bad_model[0]}")
 
-    w,b = gradient_decent(w_in, b_in, x_train, y_train, alpha = 4.0e-2, iters = 10000)
+    w,b = gradient_decent(w_in, b_in, x_train, y_train, alpha = 4.0e-2, iters = 10000,lambda_= 0)
     xx = zscore_normalize_features(x_train)
     trained_model = get_model(w,b,xx)
     total_cost = compute_cost(w,b,x_train,y_train)
