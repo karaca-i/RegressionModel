@@ -1,5 +1,6 @@
 # Regression Model Visualizer
-
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/) [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://regvis.ubien.co/)  
+http://regvis.ubien.co/
 ## **Contributors**
 - **İbrahim Karaca**
   <img src="https://raw.githubusercontent.com/ultralytics/assets/main/social/logo-transparent.png" width="2.5%"/>
@@ -46,7 +47,9 @@ Or even though you do not understand the basics of machine learning, you can jus
 <h3 align="left">Languages and Tools</h3>
 <p align="left"> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a>  <a href="https://flask.palletsprojects.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> </a> <a href="https://socket.io/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/socketio/socketio-icon.svg" alt="socketio" width="40" height="40"/> </a> <a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.chartjs.org" target="_blank" rel="noreferrer"> <img src="https://www.chartjs.org/media/logo-title.svg" alt="chartjs" width="40" height="40"/> </a> </p> 
 
-## How to Use
+## How to Use 
+<p align="center"> <img src="https://github.com/karaca-i/RegressionModel/blob/main/demoresvig.gif" alt="demoGif" width="800" height="450"> </p>  
+
 - **Linear:** The default features, including house size, number of bedrooms, and building age, are initially provided but can be customized by users as they see fit. For example, if you have a dataset of 100 house prices along with their feature information, your model will commence training based on this data, aiming to discover the most suitable model that fits the provided information. Throughout this training process, you can observe your model's progress in real-time, witnessing its continuous improvement.
 
 - **Parameters:** You also have the flexibility to adjust the **alpha** (learning rate) and **lambda** (regularization coefficient) parameters to observe their effects on your model. A lower learning rate may result in slower learning, requiring more time to attain a highly accurate model, while a higher learning rate may lead to issues like gradient descent divergence. It's your task to determine the optimal values for alpha and lambda that yield the best results for your model.  
