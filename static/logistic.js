@@ -388,8 +388,13 @@ function updateLearnCard() {
   learn_start.addEventListener("click", () => {
     let col = document.getElementById("learn_col");
     col.classList.add("d-none");
+
     let graph_col = document.getElementById("graph_col");
     graph_col.classList.remove("d-none");
+
+    let params = document.getElementById("w_update");
+    params.classList.remove("d-none");
+
     let alpha = parseFloat(alpha_val.innerHTML);
     let lambda = parseFloat(lambda_val.innerHTML);
     startLearning(alpha, lambda);
@@ -429,6 +434,10 @@ function startLearning(alpha, lambda) {
     chart1_obj.update();
     let col = document.getElementById("graph_col");
     col.classList.add("d-none");
+
+    let params = document.getElementById("w_update");
+    params.classList.add("d-none");
+
     updateTable(data, names);
   });
   socket.on("connect", function () {
@@ -455,8 +464,23 @@ function startLearning(alpha, lambda) {
     console.log(feed);
     addData(feed[0], feed[1]);
     updateChart1(feed[2], data);
+    updateParams(feed[3], feed[4]);
   });
 }
+
+function updateParams(w, b) {
+  let w_val = document.getElementById("w_val");
+  let b_val = document.getElementById("b_val");
+
+  for (let i = 0; i < w.length; ++i) {
+    w[i] = parseFloat(w[i]).toFixed(3);
+  }
+  b = parseFloat(b).toFixed(7);
+
+  w_val.textContent = w;
+  b_val.textContent = b;
+}
+
 function updateTable(data, names) {
   let table = document.getElementById("reg-table");
   table.innerHTML = "";

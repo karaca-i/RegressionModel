@@ -85,7 +85,7 @@ def learn_linear(client_sid, msg):
         f = rev_normalization(y,f)
         
         # sending the data to the server
-        client_data[client_sid] = (i,curr_cost,list(f))
+        client_data[client_sid] = (i,curr_cost,list(f),list(w),b) ########
         # print(w,b)
         i+=1 
 
@@ -156,7 +156,7 @@ def learn_logistic(client_sid, msg):
         w_cost = w_cost - alpha*dj_dw_cost
         b_cost = b_cost - alpha*dj_db_cost
         # sending the data to the server
-        client_data[client_sid] = (i,curr_cost,list(f))
+        client_data[client_sid] = (i,curr_cost,list(f),list(w),b)
         # print(w,b)
         i+=1
     
@@ -184,7 +184,7 @@ def handle_disconnect():
 def get_data():
     sid = request.sid
     if sid in client_data:
-        emit("data",[client_data[sid][0],client_data[sid][1],client_data[sid][2]])
+        emit("data",[client_data[sid][0],client_data[sid][1],client_data[sid][2],client_data[sid][3],client_data[sid][4]])
     else:
         emit("data", 0)
 

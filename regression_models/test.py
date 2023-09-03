@@ -101,3 +101,7 @@ from time import time
 #             client_data[client_sid] = (i,curr_cost)
 #             # print(w,b)
             # i+=1   
+            
+x = 1
+y = np.array([1,2])
+print(np.isscalar(y))
