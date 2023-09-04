@@ -60,7 +60,8 @@ Or even though you do not understand the basics of machine learning, you can jus
 
 - **Graphs:** Upper graph represents the model error (lower is better). Lower graph is your model's representation, if you set your variables wisely, then you should see it gets better every second (gets close to actual data).
 
-- **Predictions:** You may use your **trained model** to predict an output, and see how accurate that prediction is.  
+- **Predictions:** You may use your **trained model** to predict an output, and see how accurate that prediction is.
+  **Remember**: To make your model's predictions accurate, you need to train your model with more data! And you need to stop the training process to get a prediction.
 
 ## Models
 The functions of all the subsequent models, depending on their feature counts, are derived by:
