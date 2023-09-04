@@ -20,7 +20,6 @@ clients = []
 running = set()
 
 client_data = {}
-
     
 def zscore_normalize_features(X,rtn_ms=False):
     mu     = np.mean(X,axis=0)  
@@ -31,6 +30,13 @@ def zscore_normalize_features(X,rtn_ms=False):
         return(X_norm, mu, sigma)
     else:
         return(X_norm)
+
+def z_mult(X,rtn_ms=False):
+    mean = np.mean(X,axis=0)  
+    std = np.std(X,axis=0)
+    
+    return mean, std
+
 
 def rev_normalization(X_old,x_normalized,rtn_ms=False):
     mu     = np.mean(X_old,axis=0)  
@@ -61,6 +67,11 @@ def learn_linear(client_sid, msg):
     w = w_in
     b = b_in
     
+    meany, stdy = z_mult(y)
+    meanx, stdx = z_mult(x)
+    meanx = list(meanx)
+    stdx = list(stdx)
+    
     while True:
         while client_sid not in running:
             if client_sid not in clients:
@@ -84,8 +95,9 @@ def learn_linear(client_sid, msg):
 
         f = rev_normalization(y,f)
         
+        
         # sending the data to the server
-        client_data[client_sid] = (i,curr_cost,list(f),list(w),b) ########
+        client_data[client_sid] = (i,curr_cost,list(f),list(w),b,[meany,stdy],[meanx,stdx]) ########
         # print(w,b)
         i+=1 
 
@@ -121,7 +133,7 @@ def learn_logistic(client_sid, msg):
     # y = np.array(y)
         
     x_normalized = zscore_normalize_features(x)
-    
+    meanx, stdx = z_mult(x)
     w = w_in
     b = b_in
     w_cost = w_in
@@ -156,7 +168,7 @@ def learn_logistic(client_sid, msg):
         w_cost = w_cost - alpha*dj_dw_cost
         b_cost = b_cost - alpha*dj_db_cost
         # sending the data to the server
-        client_data[client_sid] = (i,curr_cost,list(f),list(w),b)
+        client_data[client_sid] = (i,curr_cost,list(f),list(w),b,list(meanx),list(stdx))
         # print(w,b)
         i+=1
     
@@ -184,7 +196,7 @@ def handle_disconnect():
 def get_data():
     sid = request.sid
     if sid in client_data:
-        emit("data",[client_data[sid][0],client_data[sid][1],client_data[sid][2],client_data[sid][3],client_data[sid][4]])
+        emit("data",[client_data[sid][0],client_data[sid][1],client_data[sid][2],client_data[sid][3],client_data[sid][4],client_data[sid][5],client_data[sid][6]])
     else:
         emit("data", 0)
 

@@ -395,11 +395,15 @@ function updateLearnCard() {
     let params = document.getElementById("w_update");
     params.classList.remove("d-none");
 
+  
+
     let alpha = parseFloat(alpha_val.innerHTML);
     let lambda = parseFloat(lambda_val.innerHTML);
     startLearning(alpha, lambda);
+
   });
 }
+
 function startLearning(alpha, lambda) {
   let graph_title = document.getElementById("graph_title");
   let stop_btn = document.getElementById("stop_btn");
@@ -438,6 +442,11 @@ function startLearning(alpha, lambda) {
     let params = document.getElementById("w_update");
     params.classList.add("d-none");
 
+    let outside_panel = document.getElementById("outside_panel");
+    outside_panel.classList.add("d-none");
+    let result = document.getElementById('result');
+    result.textContent = "Prediction Result: ";
+
     updateTable(data, names);
   });
   socket.on("connect", function () {
@@ -460,12 +469,97 @@ function startLearning(alpha, lambda) {
       socket.emit("stop");
     });
   });
+
   socket.on("data", function (feed) {
     console.log(feed);
     addData(feed[0], feed[1]);
     updateChart1(feed[2], data);
     updateParams(feed[3], feed[4]);
+    startPredicting(feed[3].length);
+
+    let predict_button = document.getElementById('predict_button');
+    predict_button.replaceWith(predict_button.cloneNode(true));
+    predict_button = document.getElementById('predict_button');
+
+    predict_button.addEventListener("click",()=>{
+
+      const inputs = document.querySelectorAll('.getter');
+      const x = [];
+      console.log(inputs.length);
+
+      inputs.forEach(item =>{
+        let i = parseFloat(item.value);
+        x.push(i); 
+      });
+      
+      const ws = feed[3];
+      const b = feed[4];
+
+      const meany = feed[5][0];
+      const stdy = feed[5][1];
+
+      const meanx = feed[6][0];
+      const stdx = feed[6][1];
+      const x_normalized = [];
+
+      // normalize x
+      for (let i = 0; i<x.length; i++){ 
+        let temp = (x[i] - meanx[i]) / stdx[i];
+        x_normalized.push(temp);
+      }
+
+      let actualRes = 0;
+      for (let i = 0; i<x.length; i++){
+        actualRes += ws[i] * x_normalized[i];
+      }
+      actualRes += b;
+
+      // denormalize result
+      actualRes = (actualRes * stdy) + meany;
+      
+      let result = document.getElementById('result');
+      result.textContent = `Prediction Result: ${actualRes}`;
+    }); 
+    
   });
+}
+function startPredicting(fc){
+  const featureCount = fc;
+
+  let pr_panel = document.getElementById('pr_panel');
+  pr_panel.innerHTML = "";
+  // Create a container element
+  let container = document.createElement('div');
+  container.className = 'input-container';
+
+  // Create input elements
+  for (var i = 0; i < featureCount; i++) {
+    var input = document.createElement('input');
+    
+    input.type = 'text';
+    input.placeholder = 'Enter Feature ' + (i + 1);
+    input.classList.add('getter');
+
+    // Append input elements to the container
+    container.appendChild(input);
+  }
+
+  // Append the container to the document
+  pr_panel.appendChild(container);
+  let outside_panel = document.getElementById('outside_panel');
+  outside_panel.classList.remove('d-none');
+}
+function revNormalization(X_old, x_normalized, rtn_ms = false) {
+    // Calculate the mean (mu) and standard deviation (sigma) of X_old
+    const mu = X_old.reduce((sum, value) => sum + value, 0) / X_old.length;
+    const sigma = Math.sqrt(
+        X_old.reduce((sum, value) => sum + Math.pow(value - mu, 2), 0) / X_old.length
+    );
+
+    // Perform reverse normalization
+    const x = x_normalized.map((value) => (value * sigma) + mu);
+
+    return x;
 }
 function updateParams(w, b) {
   let w_val = document.getElementById("w_val");

@@ -161,6 +161,68 @@ super() }}
         </div>
       </div>
       <!--end-->
+      <div id = 'outside_panel' class ="col-6 d-none container-top">
+        <style>
+          .container-top {
+            display: flex;
+            flex-direction: column; /* Align children vertically */
+            align-items: center; /* Align children to the start of the container */
+            padding: 20px; /* Add some padding for spacing */
+            border: 2px solid #3498db; /* Add a blue border */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+            background-color: #f0f0f0; /* Set a light background color */
+            color: #333; /* Set text color */
+            margin-top: 30px;
+        }
+        </style>
+        <div id = 'pr_text' class = "prediction-text">Prediction
+          <style>
+            .prediction-text {
+              font-size: 18px; /* Slightly smaller font size */
+              font-weight: bold; /* Set the font weight */
+              margin: 10px auto; /* Add spacing above and below the text and center it horizontally */
+              text-align: center; /* Center the text horizontally within the container */
+              color: #3897f0; /* Instagram-like blue text color */
+              background-color: #fff; /* White background color */
+              padding: 8px 12px; /* Smaller padding for a more compact look */
+              border-radius: 4px; /* Slightly rounded corners */
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle box shadow for depth */
+              margin-top: 5px;
+            }
+          </style> 
+        </div>
+          
+        <div id='pr_panel' class='col-4 containerc'>
+          <style>
+            .containerc {
+                display: flex;
+                flex-direction: column; /* Align children vertically */
+                align-items: center; /* Align children to the start of the container */
+            }
+            
+        </style>
+        </div>
+        <button id="predict_button">Submit
+          <style>
+            #predict_button {
+                background-color: #3897f0; /* Instagram-like blue background color */
+                color: white; /* White text color */
+                padding: 10px 20px; /* Padding around the text */
+                border: none; /* Remove the default border */
+                border-radius: 5px; /* Rounded corners */
+                cursor: pointer; /* Add a pointer cursor on hover */
+                font-weight: bold; /* Bold text */
+                font-size: 16px; /* Font size */
+                text-align: center; /* Center text horizontally */
+                display: block; /* Make the button a block-level element */
+                margin: 10px auto; /* Center the button horizontally within its container */
+                width: 150px; /* Set a fixed width */
+            }
+        </style>
+        </button>
+        <div id = 'result' class = ''>Prediction Result: </div>
+      </div>
     </div>
   </div>
 </div>
