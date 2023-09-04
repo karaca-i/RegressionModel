@@ -63,6 +63,8 @@ Or even though you do not understand the basics of machine learning, you can jus
 - **Predictions:** You may use your **trained model** to predict an output, and see how accurate that prediction is.
   **Remember**: To make your model's predictions accurate, you need to train your model with more data! And you need to stop the training process to get a prediction.
 
+  <p align="center"> <img src="https://github.com/karaca-i/RegressionModel/blob/main/images/predict.png" alt="predictionImg" width="580" height = "260"> </p>  
+
 ## Models
 The functions of all the subsequent models, depending on their feature counts, are derived by:
 
